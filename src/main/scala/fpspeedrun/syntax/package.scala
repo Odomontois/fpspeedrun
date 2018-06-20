@@ -5,11 +5,18 @@ object eq extends Eq.ToEqOps
 
 object ord extends Ord.ToOrdOps
 
-object num extends Num.ToNumOps with Calc.ToCalcOps {
+object num {
   def zero[T: Num]: T = Num[T].zero
   def one[T: Num]: T = Num[T].one
   implicit class IntNumOps(val x: Int) extends AnyVal {
     def toNum[T](implicit num: Num[T]): T = num.fromInt(x)
+  }
+
+  implicit class NumOps[A](val x: A) extends AnyVal{
+    def *(y: A)(implicit num: Num[A]): A = num.times(x, y)
+    def +(y: A)(implicit num: Num[A]): A = num.plus(x, y)
+    def -(y: A)(implicit num: Num[A]): A = num.minus(x, y)
+    def unary_-(implicit num: Num[A]): A = num.negate(x)
   }
 }
 
